@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist Interativo - Resposta a Incidentes</title>
+    <title>Checklist Interativo - Resposta a Incidentes (NIST)</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -34,15 +34,17 @@
             padding: 15px;
             font-size: 1.6rem;
             margin-top: 0;
+            text-align: center;
         }
 
         .intro {
             background: #ffffff;
             padding: 15px;
-            border-left: 5px solid #ffffff;
+            border-left: 5px solid #666666;
             margin-bottom: 30px;
             font-size: 16px;
-            color: #000000;
+            color: #333;
+            font-style: italic;
         }
 
         h2 {
@@ -98,10 +100,6 @@
             cursor: pointer;
         }
 
-        .option span {
-            color: #1a1a1a;
-        }
-
         .highlight-box {
             background: #fff8e1;
             border: 1px solid #d3d3d3;
@@ -110,7 +108,6 @@
             border-radius: 6px;
         }
 
-        /* Estilo dos Botões */
         .actions {
             margin-top: 40px;
             display: flex;
@@ -129,23 +126,9 @@
             transition: background 0.3s;
         }
 
-        .btn-print {
-            background-color: #666666;
-            color: white;
-        }
-
-        .btn-print:hover {
-            background-color: #1a252f;
-        }
-
-        .btn-clear {
-            background-color: #666666;
-            color: white;
-        }
-
-        .btn-clear:hover {
-            background-color: #7f8c8d;
-        }
+        .btn-print { background-color: #666666; color: white; }
+        .btn-print:hover { background-color: #1a252f; }
+        .btn-clear { background-color: #999; color: white; }
 
         footer {
             margin-top: 40px;
@@ -156,288 +139,143 @@
             padding-bottom: 20px;
         }
 
-        /* Ajustes para Impressão */
         @media print {
             body { background-color: white; padding: 0; }
             .container { box-shadow: none; max-width: 100%; }
             .actions { display: none; }
-            footer { position: fixed; bottom: 0; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Checklist - Informações Comprometidas</h1>
+    <h1>Checklist de Resposta: Compromisso de Informações</h1>
     
     <div class="intro">
-        Este guia fornece uma estrutura técnica para resposta a incidentes de segurança. Siga os passos sequencialmente para garantir a contenção, análise, erradicação e recuperação total do ambiente afetado.
+        Este checklist operacional deve ser utilizado em conjunto com o fluxograma tático. Cada etapa validada garante a preservação de evidências e a conformidade com as diretrizes do NIST e da LGPD.
     </div>
 
     <form id="checklistForm">
-        <h2>1. CONTENÇÃO E PRESERVAÇÃO</h2>
+        <h2>1. DETECÇÃO (IDENTIFICAÇÃO)</h2>
         
         <div class="question-block">
-            <span class="question-text">1.1 Houve alerta de comprometimento?</span>
+            <span class="question-text">1.1 A origem e o tipo do alerta foram validados?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Iniciar isolamento imediato</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Continuar monitoramento</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Confirmado via SIEM/EDR/Logs de Rede</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Verificar falsos positivos antes de escalar</span></label>
             </div>
         </div>
 
         <div class="question-block">
-            <span class="question-text">1.2 O sistema foi isolado logicamente de forma imediata?</span>
+            <span class="question-text">1.2 Foram coletadas evidências voláteis (RAM/Sessões Ativas)?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Prosseguir para captura de memória</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Executar isolamento agora</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Dados preservados para perícia forense</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Capturar agora (evitar reboot do sistema)</span></label>
             </div>
         </div>
 
-        <div class="question-block">
-            <span class="question-text">1.3 A memória RAM foi capturada?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Registrar sessões ativas</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar captura antes de prosseguir</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">1.4 As sessões ativas foram registradas?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Monitorar conexões</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Registrar imediatamente</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">1.5 As conexões estão sendo monitoradas?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Avançar para análise</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Ativar monitoramento</span></label>
-            </div>
-        </div>
-
-        <h2>2. ANÁLISE</h2>
+        <h2>2. ANÁLISE (TRIAGEM E ESCOPO)</h2>
         
         <div class="question-block">
-            <span class="question-text">2.1 A criticidade do incidente foi avaliada?</span>
+            <span class="question-text">2.1 O escopo do incidente foi definido?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Avaliar risco de propagação</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar avaliação</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.2 Existe risco de propagação imediata?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Isolar servidor offline</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Reforçar monitoramento</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.3 O responsável pelo servidor foi contatado?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Avaliar custo-benefício</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Contatar imediatamente</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.4 O custo-benefício de manter o servidor online foi avaliado?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Tomar decisão final</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar análise</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.5 A decisão final sobre o estado do servidor foi tomada?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Executar ação definida</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Definir estado</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.6 O servidor foi isolado totalmente (offline)?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Prosseguir para erradicação</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Reforçar monitoramento</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">2.7 O monitoramento foi reforçado?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Prosseguir</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Implementar reforço</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Hosts, contas e dados afetados foram listados</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Mapear pontos de entrada e movimentação lateral</span></label>
             </div>
         </div>
 
         <div class="highlight-box">
-            <h3>Tipo de Informação Comprometida:</h3>
-            
+            <h3>Triagem LGPD / Criticidade:</h3>
             <div class="question-block">
-                <span class="question-text">Credenciais de acesso?</span>
+                <span class="question-text">Há indícios de exfiltração de Dados Pessoais?</span>
                 <div class="options-container">
-                    <label class="option"><input type="checkbox"> <span>Sim → Revogar tokens/senhas e verificar privilégios</span></label>
-                    <label class="option"><input type="checkbox"> <span>Não → Prosseguir</span></label>
-                </div>
-            </div>
-
-            <div class="question-block">
-                <span class="question-text">Dados pessoais/sensíveis?</span>
-                <div class="options-container">
-                    <label class="option"><input type="checkbox"> <span>Sim → Notificar autoridade reguladora e avaliar impacto</span></label>
-                    <label class="option"><input type="checkbox"> <span>Não → Prosseguir</span></label>
-                </div>
-            </div>
-
-            <div class="question-block">
-                <span class="question-text">Informações financeiras?</span>
-                <div class="options-container">
-                    <label class="option"><input type="checkbox"> <span>Sim → Bloquear transações e comunicar instituições</span></label>
-                    <label class="option"><input type="checkbox"> <span>Não → Prosseguir</span></label>
+                    <label class="option"><input type="checkbox"> <span>Sim → Acionar DPO imediatamente (Prazo 48h)</span></label>
+                    <label class="option"><input type="checkbox"> <span>Não → Seguir fluxo técnico padrão</span></label>
                 </div>
             </div>
         </div>
 
-        <h2>3. ERRADICAÇÃO E RECUPERAÇÃO</h2>
+        <div class="question-block">
+            <span class="question-text">2.2 A causa raiz inicial foi identificada? (Ex: Credencial, Vulnerabilidade)</span>
+            <div class="options-container">
+                <label class="option"><input type="checkbox"> <span>Sim → Preparar estratégia de contenção específica</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Continuar análise de logs e tráfego</span></label>
+            </div>
+        </div>
+
+        <h2>3. CONTENÇÃO</h2>
         
         <div class="question-block">
-            <span class="question-text">3.1 O malware ou vetor foi identificado?</span>
+            <span class="question-text">3.1 O isolamento de rede foi aplicado com sucesso?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Remover completamente</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Investigar origem</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Hosts isolados via VLAN ou Regras de Firewall</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Isolar fisicamente ou logicamente o ativo agora</span></label>
             </div>
         </div>
 
         <div class="question-block">
-            <span class="question-text">3.2 O malware foi removido?</span>
+            <span class="question-text">3.2 Credenciais comprometidas foram revogadas?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Corrigir vulnerabilidades</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Executar remoção</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Reset de senhas e invalidação de tokens/cookies</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Executar reset imediato para impedir persistência</span></label>
             </div>
         </div>
 
-        <div class="question-block">
-            <span class="question-text">3.3 As vulnerabilidades foram corrigidas?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Verificar backdoors</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Corrigir imediatamente</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">3.4 Backdoors foram verificados e eliminados?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Restaurar sistemas</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar verificação</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">3.5 Os sistemas foram restaurados?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Prosseguir para recuperação</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Restaurar antes de avançar</span></label>
-            </div>
-        </div>
-
-        <h2>4. RECUPERAÇÃO E CONFORMIDADE</h2>
+        <h2>4. ERRADICAÇÃO</h2>
         
         <div class="question-block">
-            <span class="question-text">4.1 A reintegração foi feita de forma gradual?</span>
+            <span class="question-text">4.1 O vetor de ataque foi eliminado?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Verificar integridade</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Ajustar processo</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Vulnerabilidade corrigida ou serviço desativado</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Aplicar patches ou hardenização</span></label>
             </div>
         </div>
 
         <div class="question-block">
-            <span class="question-text">4.2 A integridade dos sistemas foi verificada?</span>
+            <span class="question-text">4.2 Verificação de artefatos maliciosos (Webshells/Backdoors)?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Documentar incidente</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar verificação</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Sistema limpo e verificado por antivírus/EDR</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Realizar varredura completa em busca de persistência</span></label>
             </div>
         </div>
 
-        <div class="question-block">
-            <span class="question-text">4.3 O incidente foi documentado?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Verificar conformidade</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Documentar imediatamente</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">4.4 A conformidade foi verificada?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Notificar reguladores se necessário</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar verificação</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">4.5 Notificações regulatórias foram enviadas (se aplicável)?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Prosseguir</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Enviar notificações</span></label>
-            </div>
-        </div>
-
-        <h2>5. ATIVIDADES PÓS-INCIDENTE</h2>
+        <h2>5. RECUPERAÇÃO E CONFORMIDADE</h2>
         
         <div class="question-block">
-            <span class="question-text">5.1 Foi realizada análise da causa raiz?</span>
+            <span class="question-text">5.1 A restauração dos serviços foi validada?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Registrar lições aprendidas</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar análise</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Backup íntegro restaurado e testado</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Validar integridade dos dados antes da produção</span></label>
             </div>
         </div>
 
         <div class="question-block">
-            <span class="question-text">5.2 As lições aprendidas foram registradas?</span>
+            <span class="question-text">5.2 Foi estabelecido monitoramento reforçado (24-48h)?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Atualizar políticas</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Documentar lições</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Alertas de alta prioridade ativos para os sistemas afetados</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Configurar monitoramento de logs em tempo real</span></label>
             </div>
         </div>
 
+        <h2>6. ATIVIDADES PÓS-INCIDENTE</h2>
+        
         <div class="question-block">
-            <span class="question-text">5.3 As políticas foram atualizadas?</span>
+            <span class="question-text">6.1 O relatório final foi concluído e as lições registradas?</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Treinar equipe</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Atualizar políticas</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">5.4 A equipe recebeu treinamento?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Implementar melhoria contínua</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Planejar treinamento</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">5.5 Houve ações de melhoria contínua?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Encerrar processo</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Definir plano de melhoria</span></label>
+                <label class="option"><input type="checkbox"> <span>Sim → Cronologia e ações documentadas</span></label>
+                <label class="option"><input type="checkbox"> <span>Não → Agendar reunião de Lições Aprendidas</span></label>
             </div>
         </div>
     </form>
 
     <div class="actions">
         <button class="btn btn-clear" onclick="document.getElementById('checklistForm').reset()">Limpar Formulário</button>
-        <button class="btn btn-print" onclick="window.print()">Imprimir Checklist</button>
+        <button class="btn btn-print" onclick="window.print()">Imprimir para Relatório</button>
     </div>
 </div>
 
 <footer>
-    Versão 1.0 - Janeiro 2026
+    UFRGS / Hackers do Bem - Versão Atualizada Janeiro 2026
 </footer>
 
 </body>
