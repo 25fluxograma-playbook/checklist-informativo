@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist Interativo - Resposta a Incidentes (NIST)</title>
+    <title>Checklist Interativo - Comprometimento de Contas (NIST)</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-prep: #666666;
+            --color-det: #666666;
+            --color-cont: #666666;
+            --color-errad: #666666;
+            --color-recup: #666666;
+            --color-pos: #666666;
+        }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #e2e4e3;
+            background-color: #f0f2f1;
             color: #060b41;
             line-height: 1.6;
             padding: 20px;
@@ -16,266 +24,160 @@
             flex-direction: column;
             align-items: center;
         }
-
         .container {
             max-width: 850px;
-            background: rgb(255, 255, 255);
+            background: white;
             padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(54, 54, 54, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
-
         h1 {
-            background-color: #666666;
+            background-color: #333;
             color: #ffffff;
-            border-radius: 3px;
-            border-bottom: 2px solid #ffffff;
+            border-radius: 4px;
             padding: 15px;
             font-size: 1.6rem;
             margin-top: 0;
             text-align: center;
         }
-
         .intro {
-            background: #ffffff;
+            background: #f9f9f9;
             padding: 15px;
-            border-left: 5px solid #666666;
+            border-left: 5px solid #333;
             margin-bottom: 30px;
-            font-size: 16px;
-            color: #333;
             font-style: italic;
         }
-
         h2 {
-            background-color: #666666;
             color: white;
             padding: 12px 15px;
             border-radius: 4px;
             margin-top: 35px;
             font-size: 18px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
-        h3 {
-            color: #000000;
-            margin-top: 25px;
-            font-size: 1.2rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
+        .h-prep { background-color: var(--color-prep); }
+        .h-det { background-color: var(--color-det); }
+        .h-cont { background-color: var(--color-cont); }
+        .h-errad { background-color: var(--color-errad); }
+        .h-recup { background-color: var(--color-recup); }
+        .h-pos { background-color: var(--color-pos); }
 
         .question-block {
-            margin-bottom: 20px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .question-text {
-            font-weight: 700;
-            display: block;
-            margin-bottom: 10px;
-            color: #000000;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding-left: 10px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .option input {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .highlight-box {
-            background: #fff8e1;
-            border: 1px solid #d3d3d3;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-
-        .actions {
-            margin-top: 40px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
             transition: background 0.3s;
         }
-
-        .btn-print { background-color: #666666; color: white; }
-        .btn-print:hover { background-color: #1a252f; }
-        .btn-clear { background-color: #999; color: white; }
-
-        footer {
-            margin-top: 40px;
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            text-align: center;
-            width: 100%;
-            padding-bottom: 20px;
+        .question-block:hover { background: #fcfcfc; }
+        .question-text { font-weight: 700; display: block; margin-bottom: 8px; color: #1a1a1a; }
+        .options-container { display: flex; flex-direction: column; gap: 6px; padding-left: 5px; }
+        .option { display: flex; align-items: center; cursor: pointer; font-size: 0.95rem; }
+        .option input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; }
+        
+        .decision-box {
+            background: #fff9c4;
+            border: 1px solid #fbc02d;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-weight: bold;
         }
 
-        @media print {
-            body { background-color: white; padding: 0; }
-            .container { box-shadow: none; max-width: 100%; }
-            .actions { display: none; }
-        }
+        .actions { margin-top: 40px; display: flex; gap: 15px; justify-content: center; }
+        .btn { padding: 12px 25px; font-weight: 700; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-print { background-color: #333; color: white; }
+        .btn-clear { background-color: #bbb; color: white; }
+
+        footer { margin-top: 40px; font-size: 0.85rem; color: #7f8c8d; text-align: center; }
+        @media print { .actions, .btn-clear { display: none; } .container { box-shadow: none; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Checklist Informações Comprometidas</h1>
+    <h1>Checklist: Resposta a Contas Comprometidas</h1>
     
     <div class="intro">
-        Este checklist operacional deve ser utilizado em conjunto com o fluxograma tático. Cada etapa validada garante a preservação de evidências e a conformidade com as diretrizes do NIST e da LGPD.
+        Baseado no NIST SP 800-61. Este checklist segue o fluxo tático de identificação, contenção rigorosa e erradicação de persistência em contas de usuário.
     </div>
 
     <form id="checklistForm">
-        <h2>1. DETECÇÃO (IDENTIFICAÇÃO)</h2>
-        
+        <h2 class="h-prep">1. PREPARAÇÃO (Proativo)</h2>
         <div class="question-block">
-            <span class="question-text">1.1 A origem e o tipo do alerta foram validados?</span>
+            <span class="question-text">1.1 Higiene e Gestão de Identidade (IAM)</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Confirmado via SIEM/EDR/Logs de Rede</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Verificar falsos positivos antes de escalar</span></label>
+                <label class="option"><input type="checkbox"> <span>Mapeamento de contas críticas e níveis de privilégios realizado</span></label>
+                <label class="option"><input type="checkbox"> <span>Inventário de métodos de autenticação e MFA atualizado</span></label>
+                <label class="option"><input type="checkbox"> <span>Baseline de comportamento (UEBA) estabelecido para detecção de anomalias</span></label>
             </div>
         </div>
 
+        <h2 class="h-det">2. DETECÇÃO E ANÁLISE</h2>
         <div class="question-block">
-            <span class="question-text">1.2 Foram coletadas evidências voláteis (RAM/Sessões Ativas)?</span>
+            <span class="question-text">2.1 Validação do Incidente</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Dados preservados para perícia forense</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Capturar agora (evitar reboot do sistema)</span></label>
+                <label class="option"><input type="checkbox"> <span>Alerta triado e validado como incidente real (Eliminar Falso Positivo)</span></label>
+                <label class="option"><input type="checkbox"> <span>Classificação de criticidade e impacto do comprometimento realizada</span></label>
+                <label class="option"><input type="checkbox"> <span>Evidências voláteis, logs de acesso e sessões ativas preservadas</span></label>
             </div>
         </div>
 
-        <h2>2. ANÁLISE (TRIAGEM E ESCOPO)</h2>
-        
+        <h2 class="h-cont">3. CONTENÇÃO (Isolamento)</h2>
         <div class="question-block">
-            <span class="question-text">2.1 O escopo do incidente foi definido?</span>
+            <span class="question-text">3.1 Ações Imediatas de Bloqueio</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Hosts, contas e dados afetados foram listados</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Mapear pontos de entrada e movimentação lateral</span></label>
+                <label class="option"><input type="checkbox"> <span>Bloqueio imediato da conta no diretório (AD/Entra ID/Okta)</span></label>
+                <label class="option"><input type="checkbox"> <span>Revogação de todos os tokens de sessão e logout forçado executado</span></label>
+            </div>
+        </div>
+        <div class="decision-box">
+            Decisão: Há risco de propagação imediata ou movimentação lateral?
+            <div class="options-container" style="margin-top:10px;">
+                <label class="option"><input type="checkbox"> <span>SIM → Manter isolamento estrito de rede/sistemas</span></label>
+                <label class="option"><input type="checkbox"> <span>NÃO → Aplicar monitoramento restrito e reset preventivo</span></label>
             </div>
         </div>
 
-        <div class="highlight-box">
-            <h3>Triagem LGPD / Criticidade:</h3>
-            <div class="question-block">
-                <span class="question-text">Há indícios de exfiltração de Dados Pessoais?</span>
-                <div class="options-container">
-                    <label class="option"><input type="checkbox"> <span>Sim → Acionar DPO imediatamente (Prazo 48h)</span></label>
-                    <label class="option"><input type="checkbox"> <span>Não → Seguir fluxo técnico padrão</span></label>
-                </div>
+        <h2 class="h-errad">4. ERRADICAÇÃO (Limpeza)</h2>
+        <div class="question-block">
+            <span class="question-text">4.1 Remoção de Persistência</span>
+            <div class="options-container">
+                <label class="option"><input type="checkbox"> <span>Auditoria realizada em busca de regras de e-mail maliciosas e tokens delegados</span></label>
+                <label class="option"><input type="checkbox"> <span>Backdoors, permissões OAuth e aplicativos suspeitos removidos</span></label>
+                <label class="option"><input type="checkbox"> <span>Ameaça removida confirmada antes da notificação segura</span></label>
             </div>
         </div>
 
+        <h2 class="h-recup">5. RECUPERAÇÃO</h2>
         <div class="question-block">
-            <span class="question-text">2.2 A causa raiz inicial foi identificada? (Ex: Credencial, Vulnerabilidade)</span>
+            <span class="question-text">5.1 Reintegração Segura</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Preparar estratégia de contenção específica</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Continuar análise de logs e tráfego</span></label>
+                <label class="option"><input type="checkbox"> <span>Reset de senhas e recadastramento de novos fatores de MFA concluído</span></label>
+                <label class="option"><input type="checkbox"> <span>Sistemas e dados restaurados; patches de segurança aplicados</span></label>
+                <label class="option"><input type="checkbox"> <span>Validação de conformidade técnica e integridade realizada</span></label>
             </div>
         </div>
 
-        <h2>3. CONTENÇÃO</h2>
-        
+        <h2 class="h-pos">6. ATIVIDADES PÓS-INCIDENTE</h2>
         <div class="question-block">
-            <span class="question-text">3.1 O isolamento de rede foi aplicado com sucesso?</span>
+            <span class="question-text">6.1 Lições Aprendidas</span>
             <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Hosts isolados via VLAN ou Regras de Firewall</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Isolar fisicamente ou logicamente o ativo agora</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">3.2 Credenciais comprometidas foram revogadas?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Reset de senhas e invalidação de tokens/cookies</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Executar reset imediato para impedir persistência</span></label>
-            </div>
-        </div>
-
-        <h2>4. ERRADICAÇÃO</h2>
-        
-        <div class="question-block">
-            <span class="question-text">4.1 O vetor de ataque foi eliminado?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Vulnerabilidade corrigida ou serviço desativado</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Aplicar patches ou hardenização</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">4.2 Verificação de artefatos maliciosos (Webshells/Backdoors)?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Sistema limpo e verificado por antivírus/EDR</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Realizar varredura completa em busca de persistência</span></label>
-            </div>
-        </div>
-
-        <h2>5. RECUPERAÇÃO E CONFORMIDADE</h2>
-        
-        <div class="question-block">
-            <span class="question-text">5.1 A restauração dos serviços foi validada?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Backup íntegro restaurado e testado</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Validar integridade dos dados antes da produção</span></label>
-            </div>
-        </div>
-
-        <div class="question-block">
-            <span class="question-text">5.2 Foi estabelecido monitoramento reforçado (24-48h)?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Alertas de alta prioridade ativos para os sistemas afetados</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Configurar monitoramento de logs em tempo real</span></label>
-            </div>
-        </div>
-
-        <h2>6. ATIVIDADES PÓS-INCIDENTE</h2>
-        
-        <div class="question-block">
-            <span class="question-text">6.1 O relatório final foi concluído e as lições registradas?</span>
-            <div class="options-container">
-                <label class="option"><input type="checkbox"> <span>Sim → Cronologia e ações documentadas</span></label>
-                <label class="option"><input type="checkbox"> <span>Não → Agendar reunião de Lições Aprendidas</span></label>
+                <label class="option"><input type="checkbox"> <span>Auditoria detalhada de logs pós-evento concluída</span></label>
+                <label class="option"><input type="checkbox"> <span>Relatório de métricas, indicadores e causa raiz elaborado</span></label>
+                <label class="option"><input type="checkbox"> <span>Playbooks atualizados e treinamento de equipe agendado</span></label>
             </div>
         </div>
     </form>
 
     <div class="actions">
-        <button class="btn btn-clear" onclick="document.getElementById('checklistForm').reset()">Limpar Formulário</button>
-        <button class="btn btn-print" onclick="window.print()">Imprimir para Relatório</button>
+        <button class="btn btn-clear" onclick="document.getElementById('checklistForm').reset()">Limpar Checklist</button>
+        <button class="btn btn-print" onclick="window.print()">Gerar PDF / Imprimir</button>
     </div>
 </div>
 
 <footer>
-    UFRGS / Hackers do Bem - Versão Atualizada Janeiro 2026
+    UFRGS / Hackers do Bem - Estrutura NIST SP 800-61 Rev. 3 
 </footer>
 
 </body>
